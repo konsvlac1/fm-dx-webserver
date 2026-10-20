@@ -15,6 +15,10 @@ const themes = {
     theme7: [ 'rgb(13, 11, 26)', 'rgb(128, 105, 250)', 'rgb(255, 255, 255)', 'rgb(5, 4, 7)' ], // Blurple
     theme8: [ 'rgb(252, 186, 3)', 'rgb(0, 0, 0)', 'rgb(0, 0, 0)', 'rgb(252, 186, 3)' ], // Construction
     theme9: [ 'rgb(0, 0, 0)', 'rgb(204, 204, 204)', 'rgb(255, 255, 255)', 'rgb(0, 0, 0)' ], // AMOLED
+    theme12: [ 'rgb(12, 12, 12)', 'rgb(218, 163, 73)', 'rgb(245, 245, 242)', 'rgb(0, 0, 0)' ], // Levadeia Amber
+    theme13: [ 'rgb(6, 20, 22)', 'rgb(92, 206, 198)', 'rgb(236, 248, 246)', 'rgb(0, 8, 10)' ], // Levadeia River
+    theme14: [ 'rgb(26, 18, 12)', 'rgb(205, 150, 98)', 'rgb(255, 248, 238)', 'rgb(10, 6, 4)' ], // Chlomo
+    theme15: [ 'rgb(14, 22, 38)', 'rgb(245, 215, 161)', 'rgb(242, 245, 250)', 'rgb(5, 8, 15)' ], // Levadeia Panorama
 };
 
 // Signal Units
@@ -99,6 +103,7 @@ function updateFavicon(color) {
 
 function setTheme(themeName) {
     const themeColors = themes[themeName];
+    document.documentElement.setAttribute("data-theme", themeName);
     if (themeColors) {
         // Extracting the RGBA components from themeColors[2] for --color-text-2
         const rgbaComponentsText = themeColors[2].match(/(\d+(\.\d+)?)/g);

@@ -10,3 +10,5 @@
 @import url("setup.css"); /* Web setup interface */
 @import url("multiselect.css"); /* Multiselect tags */
 @import url("helpers.css"); /* Stuff that is used often such as text changers etc */
+@import url("levadeia-pro.css"); /* Levadeia Amber (theme12), River (13), Chlomo (14) */
+@import url("levadeia-clear.css"); /* Levadeia Panorama (theme15) */

@@ -1,0 +1,568 @@
+/* ==========================================================
+   Levadeia Amber (theme12, formerly "Levadeia Pro"): vintage radio look, glowing amber display.
+   Levadeia River (theme13): same layout, river colours and subtle water effects
+   (Herkyna river / Krya springs). River-only rules are at the end of the file.
+   ========================================================== */
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) {
+    --lp-gold: 218, 163, 73;
+    --lp-amber: rgb(255, 178, 70);
+    --lp-amber-glow: 0 0 4px rgba(255, 170, 60, 0.75), 0 0 14px rgba(255, 140, 30, 0.45), 0 0 28px rgba(255, 120, 20, 0.20);
+    --lp-scanlines: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 3px);
+    --lp-panel: 14, 12, 9;
+    --lp-panel-hover: 20, 16, 10;
+    --lp-glow: 255, 160, 50;
+    --lp-accent-text: 255, 178, 70;
+}
+
+/* Matte front panels: recessed window with a thin brass edge */
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) *[class^="panel-"]:not(.no-bg):not(.panel-full) {
+    border-radius: 18px;
+    background:
+        var(--lp-scanlines),
+        radial-gradient(ellipse at 50% 0%, rgba(var(--lp-gold), 0.06), transparent 70%),
+        rgba(var(--lp-panel), 0.40);
+    box-shadow:
+        inset 0 0 0 1px rgba(var(--lp-gold), 0.18),
+        inset 0 3px 10px rgba(0, 0, 0, 0.45),
+        0 1px 0 rgba(255, 255, 255, 0.04);
+    transition: 0.3s ease box-shadow;
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .panel-100.w-100::before {
+    border-radius: 18px;
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) *[class^="panel-"].hover-brighten:hover {
+    background:
+        var(--lp-scanlines),
+        radial-gradient(ellipse at 50% 0%, rgba(var(--lp-gold), 0.12), transparent 70%),
+        rgba(var(--lp-panel-hover), 0.55) !important;
+    box-shadow:
+        inset 0 0 0 1px rgba(var(--lp-gold), 0.45),
+        inset 0 3px 10px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* Engraved labels: FREQUENCY, SIGNAL, PI CODE ... */
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) *[class^="panel-"] h2 {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    padding-left: 4px; /* balances the trailing letter-spacing so the label is optically centred */
+    text-transform: uppercase;
+    color: rgba(var(--lp-gold), 0.65);
+}
+
+/* Live data headings (PTY, station name) are not labels */
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) *[class^="panel-"] h2:has(.data-pty),
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) *[class^="panel-"] h2:has(#data-station-name) {
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: none;
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .data-pty {
+    color: var(--lp-amber) !important;
+    text-shadow: 0 0 6px rgba(var(--lp-glow), 0.5);
+}
+
+/* Glowing amber display digits */
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #data-frequency,
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #data-pi,
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #data-signal,
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #data-signal-decimal,
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #data-ps {
+    font-family: "Roboto Mono", monospace;
+    font-weight: 400;
+    color: var(--lp-amber);
+    text-shadow: var(--lp-amber-glow);
+    letter-spacing: 2px;
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #data-rt0,
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #data-rt1,
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #data-station-name {
+    color: var(--lp-amber);
+    text-shadow: 0 0 6px rgba(var(--lp-glow), 0.45);
+}
+
+/* Hardware keys: flat, with a pressed-in bottom edge */
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) button:not(.no-bg):not(.bg-none) {
+    border-radius: 18px;
+    background-image: none;
+    box-shadow:
+        inset 0 -2px 0 rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) button:not(.no-bg):not(.bg-none):active {
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.45);
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) button:not(.no-bg):not(.bg-none):hover {
+    box-shadow:
+        inset 0 -2px 0 rgba(0, 0, 0, 0.35),
+        0 0 10px rgba(var(--lp-glow), 0.45);
+}
+
+/* Desktop: centre panel contents vertically */
+@media only screen and (min-width: 769px) {
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #pi-code-container,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container + .panel-33,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #flags-container-desktop,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #rt-container,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #rt-container + .panel-33 {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #pi-code-container h2,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container h2,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container + .panel-33 h2,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #rt-container h2 {
+        margin-top: 0 !important;
+    }
+
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #rt-container > div {
+        align-self: stretch;
+    }
+
+    /* Signal: number and dBf unit centred together as one group */
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container + .panel-33 .text-big {
+        position: relative;
+        display: inline-block;
+        white-space: nowrap;
+    }
+
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container + .panel-33 .text-big {
+        word-spacing: -0.45em; /* the space before dBf is very wide in the big mono font */
+        left: 8px; /* nudge the value a little to the right (already position: relative) */
+    }
+
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container + .panel-33 .text-big .signal-units {
+        position: static;
+        margin-left: 8px;
+        word-spacing: normal;
+    }
+
+    /* Peak signal / regular PI: own small line under the label, never over the number */
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .highest-signal-container {
+        margin: 0 !important;
+        height: 16px;
+        line-height: 16px;
+        color: rgba(var(--lp-accent-text), 0.75);
+    }
+
+    /* PI code: its small line stays empty but keeps its space, so the PI, frequency
+       and signal labels and numbers line up across the three panels */
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #pi-code-container .highest-signal-container {
+        visibility: hidden;
+    }
+
+    /* No previous-frequency line (LiveMap off): keep the same spacing */
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container:not(:has(> .text-small.text-gray)) h2 {
+        margin-bottom: 24px !important;
+    }
+
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #pi-code-container,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container + .panel-33 {
+        min-height: 120px;
+        gap: 8px;
+        padding: 12px 0;
+    }
+
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #pi-code-container .text-big,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container .text-big,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container + .panel-33 .text-big {
+        line-height: 1;
+    }
+
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #pi-code-container h2,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container h2,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container + .panel-33 h2 {
+        margin-bottom: 0;
+    }
+}
+
+/* Frequency: use the full panel width, shrink only if the panel is really narrow */
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container {
+    container-type: inline-size;
+    padding-left: 46px !important;  /* equal space both sides keeps it centred */
+    padding-right: 46px !important; /* and clear of the Autotune button, bottom-right */
+    box-sizing: border-box;
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #data-frequency {
+    font-size: min(36px, calc(100cqi / 3.4)); /* frequency */
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+/* LiveMap previous frequency: its own small line under the label (like the peak signal) */
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container > .text-small.text-gray {
+    position: static !important;
+    transform: none !important;
+    top: auto !important;
+    left: auto !important;
+    height: 16px;
+    line-height: 16px;
+    color: #fff !important;
+}
+
+/* Signal: always fit inside its panel, with room for the dBf unit */
+@media only screen and (min-width: 769px) {
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container + .panel-33 {
+        container-type: inline-size;
+        padding-left: 12px !important;  /* number + dBf centred together */
+        padding-right: 12px !important;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container + .panel-33 .text-big {
+        font-size: min(38px, calc((100cqi - 4px) / 2.5)); /* signal: secondary */
+    }
+
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container + .panel-33 .text-big .signal-units {
+        font-size: 0.45em;
+    }
+}
+
+/* Signal decimal: same size and brightness as the whole number (56.2, not 56 + small .2) */
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #data-signal-decimal {
+    font-size: inherit !important;
+    opacity: 1 !important;
+}
+
+/* Wider frequency panel only (page width unchanged): the neighbours give up some space */
+@media only screen and (min-width: 769px) {
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container {
+        flex: 0 0 250px;
+        width: 250px;
+    }
+
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container + .panel-33 {
+        flex: 0 0 210px;
+        width: 210px;
+    }
+}
+
+/* PI code: secondary, same size as the signal */
+@media only screen and (min-width: 769px) {
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #data-pi {
+        font-size: 38px;
+    }
+}
+
+/* Saved stations (Button Presets): rounder buttons and logos */
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #plugin-button-presets button {
+    border-radius: 24px !important;
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #plugin-button-presets button img {
+    border-radius: 12px !important;
+}
+
+/* Phones: panels marked transparent stay transparent */
+@media only screen and (max-width: 768px) {
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) *[class^="panel-"].no-bg-phone {
+        background: none !important;
+        box-shadow: none !important;
+    }
+}
+
+
+/* ==========================================================
+   Levadeia River (theme13): colours and subtle water effects
+   ========================================================== */
+
+[data-theme="theme13"] {
+    --lp-gold: 92, 206, 198;                 /* aqua accent (edges, labels) */
+    --lp-amber: rgb(140, 238, 228);          /* display digits */
+    --lp-amber-glow: 0 0 4px rgba(120, 230, 220, 0.75), 0 0 14px rgba(60, 200, 200, 0.45), 0 0 28px rgba(30, 160, 180, 0.22);
+    --lp-scanlines: linear-gradient(transparent, transparent); /* no scanlines: clear water */
+    --lp-panel: 4, 22, 26;                   /* deep river green-blue */
+    --lp-panel-hover: 6, 32, 38;
+    --lp-glow: 90, 220, 210;
+    --lp-accent-text: 150, 236, 228;
+    --lp-wave: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='6' viewBox='0 0 48 6'%3E%3Cpath d='M0 3 Q 6 0 12 3 T 24 3 T 36 3 T 48 3' fill='none' stroke='%235cc6c0' stroke-opacity='0.6' stroke-width='1.2'/%3E%3C/svg%3E");
+}
+
+/* Light on water: a faint highlight drifting slowly across each panel */
+[data-theme="theme13"] *[class^="panel-"]:not(.no-bg):not(.panel-full) {
+    background:
+        linear-gradient(100deg, transparent 35%, rgba(170, 245, 240, 0.07) 50%, transparent 65%),
+        radial-gradient(ellipse at 50% 0%, rgba(var(--lp-gold), 0.08), transparent 70%),
+        rgba(var(--lp-panel), 0.38);
+    background-size: 300% 100%, auto, auto;
+    background-position: 100% 0, 0 0, 0 0;
+    animation: lp-river-shimmer 14s ease-in-out infinite;
+}
+
+[data-theme="theme13"] *[class^="panel-"]:nth-child(2n) {
+    animation-delay: -5s;
+}
+
+[data-theme="theme13"] *[class^="panel-"]:nth-child(3n) {
+    animation-delay: -9s;
+}
+
+@keyframes lp-river-shimmer {
+    0%   { background-position: 100% 0, 0 0, 0 0; }
+    50%  { background-position: 0% 0, 0 0, 0 0; }
+    100% { background-position: 100% 0, 0 0, 0 0; }
+}
+
+/* Let the river photo show through: lighter page tint (FM-DX default is 75%) and less blur */
+[data-theme="theme13"] .wrapper-outer {
+    background-color: rgba(0, 8, 10, 0.45) !important;
+}
+
+[data-theme="theme13"] *[class^="panel-"]:not(.no-bg):not(.no-filter) {
+    backdrop-filter: blur(20px) saturate(1.1);          /* frosted: removes the bright waterfall streaks */
+    -webkit-backdrop-filter: blur(20px) saturate(1.1);
+}
+
+/* Hover: a little more solid, still see-through */
+[data-theme="theme13"] *[class^="panel-"].hover-brighten:hover {
+    background:
+        radial-gradient(ellipse at 50% 0%, rgba(var(--lp-gold), 0.14), transparent 70%),
+        rgba(var(--lp-panel-hover), 0.35) !important;
+}
+
+/* Small wave under the engraved labels (not under live data headings) */
+[data-theme="theme13"] *[class^="panel-"] h2:not(:has(.data-pty)):not(:has(#data-station-name))::after {
+    content: "";
+    display: block;
+    width: 48px;
+    height: 6px;
+    margin: 3px auto 0;
+    background: var(--lp-wave) no-repeat center;
+}
+
+/* Ripple when a button is pressed */
+[data-theme="theme13"] button:not(.no-bg):not(.bg-none) {
+    background-image: radial-gradient(circle at center, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 100%);
+    background-size: 0% 0%;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: background-size 0.45s ease-out, box-shadow 0.3s ease;
+}
+
+[data-theme="theme13"] button:not(.no-bg):not(.bg-none):active {
+    background-image: radial-gradient(circle at center, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 70%);
+    background-size: 220% 220%;
+    transition: background-size 0s;
+}
+
+/* Respect visitors who turned off animations in their system */
+@media (prefers-reduced-motion: reduce) {
+    [data-theme="theme13"] *[class^="panel-"] {
+        animation: none !important;
+    }
+}
+
+
+/* ==========================================================
+   Chlomo (theme14): real photo of Chlomo mountain, River-style.
+   Fully transparent panels, warm earth-brown accent (from the road in the photo),
+   white text with a soft dark shadow so it reads over the bright photo.
+   ========================================================== */
+
+[data-theme="theme14"] {
+    --lp-gold: 205, 150, 98;                 /* earth brown accent (edges, labels) */
+    --lp-amber: rgb(255, 246, 234);          /* display digits: warm white */
+    --lp-amber-glow: 0 1px 2px rgba(0, 0, 0, 0.75), 0 0 10px rgba(0, 0, 0, 0.45); /* dark shadow, not a glow */
+    --lp-scanlines: linear-gradient(transparent, transparent);
+    --lp-panel: 30, 20, 12;
+    --lp-panel-hover: 40, 28, 16;
+    --lp-glow: 0, 0, 0;                      /* other text gets a dark shadow too */
+    --lp-accent-text: 245, 225, 200;
+}
+
+/* Own background photo: Chlomo mountain seen from the valley (stored on this server).
+   Positioned so the summit sits in the open area above the panels. */
+[data-theme="theme14"] body {
+    background: url("../images/levadeia/chlomo-mountain-1920.webp") center 80% / cover fixed no-repeat rgb(26, 18, 12) !important;
+}
+
+/* Very light warm tint over the photo, so it stays bright and clear (FM-DX default is 75% black) */
+[data-theme="theme14"] .wrapper-outer {
+    background-color: rgba(24, 14, 6, 0.16) !important;
+}
+
+/* Fully transparent panels: no fill, only a thin earth-brown border */
+[data-theme="theme14"] *[class^="panel-"]:not(.no-bg):not(.panel-full) {
+    background: transparent;
+    box-shadow: inset 0 0 0 1.5px rgba(var(--lp-gold), 0.65);
+}
+
+[data-theme="theme14"] *[class^="panel-"].hover-brighten:hover {
+    background: rgba(var(--lp-panel-hover), 0.18) !important;
+    box-shadow: inset 0 0 0 2px rgba(var(--lp-gold), 0.95) !important;
+}
+
+/* Light blur only, so the photo stays clear but the text does not sit on busy detail */
+[data-theme="theme14"] *[class^="panel-"]:not(.no-bg):not(.no-filter) {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+/* All text: soft dark shadow for readability on a transparent panel */
+[data-theme="theme14"] *[class^="panel-"] h2,
+[data-theme="theme14"] *[class^="panel-"] h3,
+[data-theme="theme14"] *[class^="panel-"] h4,
+[data-theme="theme14"] *[class^="panel-"] span,
+[data-theme="theme14"] *[class^="panel-"] li,
+[data-theme="theme14"] #tuner-name {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="theme14"] *[class^="panel-"] h2 {
+    color: rgb(var(--lp-gold));
+}
+
+/* Saved stations: transparent too, same brown border */
+[data-theme="theme14"] #plugin-button-presets button {
+    background-color: transparent !important;
+    box-shadow: inset 0 0 0 1.5px rgba(var(--lp-gold), 0.65) !important;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+/* Buttons have dark text on brown: no shadow there */
+[data-theme="theme14"] button,
+[data-theme="theme14"] button * {
+    text-shadow: none !important;
+}
+
+/* Titles: white text, no background, soft dark shadow for readability */
+[data-theme="theme14"] *[class^="panel-"] h2:not(:has(.data-pty)):not(:has(#data-station-name)) {
+    color: #fff !important;
+    background: none;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.45) !important;
+    font-weight: 700;
+}
+
+/* ---------- Header bar ---------- */
+/* Slightly darker glass than the panels, so it reads as the header */
+[data-theme="theme14"] .panel-100-real.m-0.flex-container:has(#tuner-name) {
+    background: rgba(20, 13, 8, 0.38);
+    box-shadow: inset 0 0 0 1.5px rgba(var(--lp-gold), 0.65);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* Station name: white text, no background, soft dark shadow */
+[data-theme="theme14"] h1#tuner-name,
+[data-theme="theme14"] h1#tuner-name i {
+    color: #fff !important;
+    background: none !important;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* Livemap and listener count: cream icons and text */
+[data-theme="theme14"] #LIVEMAP-on-off,
+[data-theme="theme14"] #LIVEMAP-on-off *,
+[data-theme="theme14"] .users-online-container,
+[data-theme="theme14"] .users-online-container * {
+    color: rgb(255, 238, 215) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Listener count, chat and menu: one consistent button style */
+[data-theme="theme14"] .users-online-container,
+[data-theme="theme14"] .chatbutton,
+[data-theme="theme14"] button.settings {
+    background: transparent !important;
+    box-shadow: inset 0 0 0 1.5px rgba(var(--lp-gold), 0.75) !important;
+    border-radius: 12px !important;
+    color: rgb(255, 238, 215) !important;
+}
+
+[data-theme="theme14"] .chatbutton i,
+[data-theme="theme14"] button.settings i {
+    color: rgb(255, 238, 215) !important;
+}
+
+[data-theme="theme14"] .users-online-container:hover,
+[data-theme="theme14"] .chatbutton:hover,
+[data-theme="theme14"] button.settings:hover {
+    background: rgba(var(--lp-gold), 0.9) !important;
+}
+
+[data-theme="theme14"] .chatbutton:hover i,
+[data-theme="theme14"] button.settings:hover i,
+[data-theme="theme14"] .users-online-container:hover * {
+    color: rgb(20, 13, 8) !important;
+    text-shadow: none !important;
+}
+
+
+/* ==========================================================
+   Levadeia Amber (theme12): own photo, sunset over Levadeia
+   (stored on this server). Town and rooftops kept in view at the bottom.
+   ========================================================== */
+
+[data-theme="theme12"] body {
+    background: url("../images/levadeia/levadeia-sunset-2048.webp") center 70% / cover fixed no-repeat rgb(18, 12, 8) !important;
+}
+
+/* Warm dark tint so the amber digits stay readable over the bright clouds */
+[data-theme="theme12"] .wrapper-outer {
+    background-color: rgba(16, 9, 6, 0.36) !important;
+}
+
+/* Readability over the sunset photo: warm cream for labels, header and graph numbers.
+   The big amber digits keep their glow. */
+[data-theme="theme12"] {
+    --lp-cream: 245, 230, 204;                       /* #F5E6CC */
+    --color-5: rgb(var(--lp-cream));                 /* signal graph numbers */
+}
+
+[data-theme="theme12"] *[class^="panel-"] h2:not(:has(.data-pty)):not(:has(#data-station-name)) {
+    color: rgba(var(--lp-cream), 0.92);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75), 0 0 8px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="theme12"] h1#tuner-name,
+[data-theme="theme12"] h1#tuner-name * {
+    color: rgb(var(--lp-cream)) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75), 0 0 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="theme12"] .dashboard-panel-plugin-list,
+[data-theme="theme12"] .dashboard-panel-plugin-list * {
+    color: rgb(var(--lp-cream)) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="theme12"] .highest-signal-container,
+[data-theme="theme12"] .signal-units {
+    color: rgba(var(--lp-cream), 0.85) !important;
+}
+
+/* Header plugin labels use an inline "color: var(--color-main-bright) !important",
+   so switch that variable to cream for them only */
+[data-theme="theme12"] .dashboard-panel-plugin-list button span {
+    --color-main-bright: rgb(var(--lp-cream));
+}
+
+/* "Off" controls (Auto Scan, cEQ/iMS when off, Autotune) use --color-3 with the dark
+   --color-main text (about 3:1 here); the light theme text reads better */
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .bg-color-3,
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .bg-color-3 *,
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .autotune-button:not(.active) {
+    color: var(--color-text) !important;
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .autotune-button:hover,
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .autotune-button.active {
+    color: var(--color-main) !important;
+}

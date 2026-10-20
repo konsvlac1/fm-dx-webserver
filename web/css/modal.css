@@ -207,3 +207,46 @@ body.modal-open {
         overflow-y: auto;
     }
 }
+/* Levadeia Amber / River / Chlomo: compact, translucent settings menu */
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .modal-panel,
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .modal-panel-footer {
+    width: 290px;
+    background-color: transparent;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .modal-panel {
+    border-left: 1px solid rgba(218, 163, 73, 0.25);
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .modal {
+    background-color: rgba(0, 0, 0, 0.15);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .modal-panel-sidebar {
+    width: 44px;
+    background-color: transparent;
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .modal-panel h1 {
+    font-size: 30px;
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .modal-panel-content,
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .modal-panel-footer > * {
+    zoom: 0.85;
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .modal-panel-footer .bg-color-1 {
+    background-color: transparent;
+}
+
+@media only screen and (max-width: 768px) {
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .modal-panel,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .modal-panel-footer {
+        width: 100%;
+    }
+}

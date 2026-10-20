@@ -1,0 +1,3 @@
+Background photos used by the Levadeia themes:
+livadeia-pano-1920.webp (Levadeia Panorama, theme15): "Λιβαδειά 1722-Pano.jpg" by C messier, CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0), https://commons.wikimedia.org/wiki/File:%CE%9B%CE%B9%CE%B2%CE%B1%CE%B4%CE%B5%CE%B9%CE%AC_1722-Pano.jpg
+levadeia-sunset-2048.webp (Levadeia Amber, theme12) and chlomo-mountain-1920.webp (Chlomo, theme14): own photos of the Levadeia server owner.
