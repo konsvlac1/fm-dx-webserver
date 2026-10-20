@@ -660,6 +660,11 @@ function processString(string, errors) {
     const alpha_range = 50;
     const max_error = 10;
     errors = errors?.split(',');
+
+    // Patra themes: drop trailing RDS padding so the text is visually centred
+    if (['theme12', 'theme13', 'theme14'].includes(document.documentElement.getAttribute('data-theme')) && typeof string === 'string') {
+        string = string.replace(/\s+$/, '');
+    }
     
     for (let i = 0; i < string.length; i++) {
         alpha = parseInt(errors[i]) * (alpha_range / (max_error + 1));

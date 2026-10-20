@@ -15,6 +15,9 @@ const themes = {
     theme7: [ 'rgb(13, 11, 26)', 'rgb(128, 105, 250)', 'rgb(255, 255, 255)', 'rgb(5, 4, 7)' ], // Blurple
     theme8: [ 'rgb(252, 186, 3)', 'rgb(0, 0, 0)', 'rgb(0, 0, 0)', 'rgb(252, 186, 3)' ], // Construction
     theme9: [ 'rgb(0, 0, 0)', 'rgb(204, 204, 204)', 'rgb(255, 255, 255)', 'rgb(0, 0, 0)' ], // AMOLED
+    theme12: [ 'rgb(16, 20, 38)', 'rgb(242, 150, 128)', 'rgb(250, 244, 240)', 'rgb(6, 8, 18)' ], // Rio-Antirrio Bridge
+    theme13: [ 'rgb(6, 22, 42)', 'rgb(104, 184, 236)', 'rgb(238, 247, 255)', 'rgb(0, 8, 18)' ], // Patras Harbour
+    theme14: [ 'rgb(30, 24, 16)', 'rgb(214, 176, 128)', 'rgb(255, 250, 240)', 'rgb(10, 8, 4)' ], // Castle of Patras
 };
 
 // Signal Units
@@ -99,6 +102,7 @@ function updateFavicon(color) {
 
 function setTheme(themeName) {
     const themeColors = themes[themeName];
+    document.documentElement.setAttribute("data-theme", themeName);
     if (themeColors) {
         // Extracting the RGBA components from themeColors[2] for --color-text-2
         const rgbaComponentsText = themeColors[2].match(/(\d+(\.\d+)?)/g);

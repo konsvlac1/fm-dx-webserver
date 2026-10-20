@@ -1,0 +1,4 @@
+Background photos from Wikimedia Commons:
+patra-bridge-sunset-1920.webp: "The Rio - Antirrio Bridge at sunset.jpg" by Annatsach, CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0), https://commons.wikimedia.org/wiki/File:The_Rio_-_Antirrio_Bridge_at_sunset.jpg
+patra-castle-1920.webp: "The Castle of Patras 5.jpg" by Nikolaos Kotopoulis, CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0), https://commons.wikimedia.org/wiki/File:The_Castle_of_Patras_5.jpg
+patra-marina-1920.webp: "Marina Patras 01.JPG" by Tony Esopi, CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0), https://commons.wikimedia.org/wiki/File:Marina_Patras_01.JPG

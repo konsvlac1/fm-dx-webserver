@@ -1,0 +1,677 @@
+/* ==========================================================
+   Patra themes: shared layout for theme12, theme13 and theme14.
+   Rio-Antirrio Bridge (theme12), Patras Harbour (theme13), Castle of Patras (theme14).
+   Per-theme colours and photos are at the end of the file.
+   Photo credits: ../images/patra/CREDITS.txt (also shown bottom-left on the page).
+   ========================================================== */
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) {
+    --lp-gold: 218, 163, 73;
+    --lp-amber: rgb(255, 178, 70);
+    --lp-amber-glow: 0 0 4px rgba(255, 170, 60, 0.75), 0 0 14px rgba(255, 140, 30, 0.45), 0 0 28px rgba(255, 120, 20, 0.20);
+    --lp-scanlines: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 3px);
+    --lp-panel: 14, 12, 9;
+    --lp-panel-hover: 20, 16, 10;
+    --lp-glow: 255, 160, 50;
+    --lp-accent-text: 255, 178, 70;
+}
+
+/* Matte front panels: recessed window with a thin brass edge */
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) *[class^="panel-"]:not(.no-bg):not(.panel-full) {
+    border-radius: 18px;
+    background:
+        var(--lp-scanlines),
+        radial-gradient(ellipse at 50% 0%, rgba(var(--lp-gold), 0.06), transparent 70%),
+        rgba(var(--lp-panel), 0.40);
+    box-shadow:
+        inset 0 0 0 1px rgba(var(--lp-gold), 0.18),
+        inset 0 3px 10px rgba(0, 0, 0, 0.45),
+        0 1px 0 rgba(255, 255, 255, 0.04);
+    transition: 0.3s ease box-shadow;
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .panel-100.w-100::before {
+    border-radius: 18px;
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) *[class^="panel-"].hover-brighten:hover {
+    background:
+        var(--lp-scanlines),
+        radial-gradient(ellipse at 50% 0%, rgba(var(--lp-gold), 0.12), transparent 70%),
+        rgba(var(--lp-panel-hover), 0.55) !important;
+    box-shadow:
+        inset 0 0 0 1px rgba(var(--lp-gold), 0.45),
+        inset 0 3px 10px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* Engraved labels: FREQUENCY, SIGNAL, PI CODE ... */
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) *[class^="panel-"] h2 {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    padding-left: 4px; /* balances the trailing letter-spacing so the label is optically centred */
+    text-transform: uppercase;
+    color: rgba(var(--lp-gold), 0.65);
+}
+
+/* Live data headings (PTY, station name) are not labels */
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) *[class^="panel-"] h2:has(.data-pty),
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) *[class^="panel-"] h2:has(#data-station-name) {
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: none;
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .data-pty {
+    color: var(--lp-amber) !important;
+    text-shadow: 0 0 6px rgba(var(--lp-glow), 0.5);
+}
+
+/* Glowing amber display digits */
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #data-frequency,
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #data-pi,
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #data-signal,
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #data-signal-decimal,
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #data-ps {
+    font-family: "Roboto Mono", monospace;
+    font-weight: 400;
+    color: var(--lp-amber);
+    text-shadow: var(--lp-amber-glow);
+    letter-spacing: 2px;
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #data-rt0,
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #data-rt1,
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #data-station-name {
+    color: var(--lp-amber);
+    text-shadow: 0 0 6px rgba(var(--lp-glow), 0.45);
+}
+
+/* Hardware keys: flat, with a pressed-in bottom edge */
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) button:not(.no-bg):not(.bg-none) {
+    border-radius: 18px;
+    background-image: none;
+    box-shadow:
+        inset 0 -2px 0 rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) button:not(.no-bg):not(.bg-none):active {
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.45);
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) button:not(.no-bg):not(.bg-none):hover {
+    box-shadow:
+        inset 0 -2px 0 rgba(0, 0, 0, 0.35),
+        0 0 10px rgba(var(--lp-glow), 0.45);
+}
+
+/* Desktop: centre panel contents vertically */
+@media only screen and (min-width: 769px) {
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #pi-code-container,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container + .panel-33,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #flags-container-desktop,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #rt-container,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #rt-container + .panel-33 {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #pi-code-container h2,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container h2,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container + .panel-33 h2,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #rt-container h2 {
+        margin-top: 0 !important;
+    }
+
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #rt-container > div {
+        align-self: stretch;
+    }
+
+    /* Signal: number and dBf unit centred together as one group */
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container + .panel-33 .text-big {
+        position: relative;
+        display: inline-block;
+        white-space: nowrap;
+    }
+
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container + .panel-33 .text-big {
+        word-spacing: -0.45em; /* the space before dBf is very wide in the big mono font */
+        left: 8px; /* nudge the value a little to the right (already position: relative) */
+    }
+
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container + .panel-33 .text-big .signal-units {
+        position: static;
+        margin-left: 8px;
+        word-spacing: normal;
+    }
+
+    /* Peak signal / regular PI: own small line under the label, never over the number */
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .highest-signal-container {
+        margin: 0 !important;
+        height: 16px;
+        line-height: 16px;
+        color: rgba(var(--lp-accent-text), 0.75);
+    }
+
+    /* PI code: its small line stays empty but keeps its space, so the PI, frequency
+       and signal labels and numbers line up across the three panels */
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #pi-code-container .highest-signal-container {
+        visibility: hidden;
+    }
+
+    /* No previous-frequency line (LiveMap off): keep the same spacing */
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container:not(:has(> .text-small.text-gray)) h2 {
+        margin-bottom: 24px !important;
+    }
+
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #pi-code-container,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container + .panel-33 {
+        min-height: 120px;
+        gap: 8px;
+        padding: 12px 0;
+    }
+
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #pi-code-container .text-big,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container .text-big,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container + .panel-33 .text-big {
+        line-height: 1;
+    }
+
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #pi-code-container h2,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container h2,
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container + .panel-33 h2 {
+        margin-bottom: 0;
+    }
+}
+
+/* Frequency: use the full panel width, shrink only if the panel is really narrow */
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container {
+    container-type: inline-size;
+    padding-left: 46px !important;  /* equal space both sides keeps it centred */
+    padding-right: 46px !important; /* and clear of the Autotune button, bottom-right */
+    box-sizing: border-box;
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #data-frequency {
+    font-size: min(36px, calc(100cqi / 3.4)); /* frequency */
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+/* LiveMap previous frequency: its own small line under the label (like the peak signal) */
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container > .text-small.text-gray {
+    position: static !important;
+    transform: none !important;
+    top: auto !important;
+    left: auto !important;
+    height: 16px;
+    line-height: 16px;
+    color: #fff !important;
+}
+
+/* Signal: always fit inside its panel, with room for the dBf unit */
+@media only screen and (min-width: 769px) {
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container + .panel-33 {
+        container-type: inline-size;
+        padding-left: 12px !important;  /* number + dBf centred together */
+        padding-right: 12px !important;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container + .panel-33 .text-big {
+        font-size: min(38px, calc((100cqi - 4px) / 2.5)); /* signal: secondary */
+    }
+
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container + .panel-33 .text-big .signal-units {
+        font-size: 0.45em;
+    }
+}
+
+/* Signal decimal: same size and brightness as the whole number (56.2, not 56 + small .2) */
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #data-signal-decimal {
+    font-size: inherit !important;
+    opacity: 1 !important;
+}
+
+/* Wider frequency panel only (page width unchanged): the neighbours give up some space */
+@media only screen and (min-width: 769px) {
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container {
+        flex: 0 0 250px;
+        width: 250px;
+    }
+
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #freq-container + .panel-33 {
+        flex: 0 0 210px;
+        width: 210px;
+    }
+}
+
+/* PI code: secondary, same size as the signal */
+@media only screen and (min-width: 769px) {
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #data-pi {
+        font-size: 38px;
+    }
+}
+
+/* Saved stations (Button Presets): rounder buttons and logos */
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #plugin-button-presets button {
+    border-radius: 24px !important;
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) #plugin-button-presets button img {
+    border-radius: 12px !important;
+}
+
+/* Phones: panels marked transparent stay transparent */
+@media only screen and (max-width: 768px) {
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) *[class^="panel-"].no-bg-phone {
+        background: none !important;
+        box-shadow: none !important;
+    }
+}
+
+
+/* ==========================================================
+   Shared by all three Patra themes
+   ========================================================== */
+
+/* Settings menu edge follows each theme's accent */
+/* Strong dark text shadow so text reads over the photos through see-through panels */
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) {
+    --patra-shadow: 0 0 2px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.95), 0 0 12px rgba(0, 0, 0, 0.6);
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"]) *[class^="panel-"] :is(h2, h3, h4, span, li, p),
+:is([data-theme="theme12"], [data-theme="theme13"]) #tuner-name {
+    text-shadow: var(--patra-shadow);
+}
+
+/* Live text (PTY, RadioText, station name): dark shadow plus the theme's soft glow */
+:is([data-theme="theme12"], [data-theme="theme13"]) :is(.data-pty, #data-rt0, #data-rt1, #data-station-name) {
+    text-shadow: var(--patra-shadow), 0 0 8px rgba(var(--lp-glow), 0.35) !important;
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) button,
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) button * {
+    text-shadow: none !important;
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .modal-panel {
+    border-left-color: rgba(var(--lp-gold), 0.30);
+}
+
+/* Photo credit (required by the CC BY-SA licences), small and out of the way */
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"])::after {
+    position: fixed;
+    left: 10px;
+    bottom: 6px;
+    z-index: 1;
+    font-size: 10px;
+    line-height: 1.2;
+    color: rgba(255, 255, 255, 0.55);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    pointer-events: none;
+}
+
+[data-theme="theme12"]::after { content: "Photo: Annatsach, CC BY-SA 4.0, Wikimedia Commons"; }
+[data-theme="theme13"]::after { content: "Photo: Tony Esopi, CC BY-SA 3.0, Wikimedia Commons"; }
+[data-theme="theme14"]::after { content: "Photo: Nikolaos Kotopoulis, CC BY-SA 4.0, Wikimedia Commons"; }
+
+@media only screen and (max-width: 768px) {
+    :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"])::after {
+        position: static;
+        display: block;
+        padding: 8px 0 12px;
+        text-align: center;
+    }
+}
+
+
+/* ==========================================================
+   Rio-Antirrio Bridge (theme12): the bridge at sunset over the gulf.
+   Navy glass panels, coral accent from the sky, warm white digits
+   like the bridge lamps. Small cable-stayed pylon under the labels.
+   ========================================================== */
+
+[data-theme="theme12"] {
+    --lp-gold: 242, 150, 128;                /* coral accent (edges, labels) */
+    --lp-amber: rgb(255, 226, 196);          /* display digits: warm lamp white */
+    --lp-amber-glow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 10px rgba(0, 0, 0, 0.55), 0 0 4px rgba(255, 200, 160, 0.6), 0 0 16px rgba(242, 130, 100, 0.35);
+    --lp-scanlines: linear-gradient(transparent, transparent);
+    --lp-panel: 12, 16, 34;                  /* evening navy, from the sea */
+    --lp-panel-hover: 20, 26, 50;
+    --lp-glow: 242, 140, 110;
+    --lp-accent-text: 255, 214, 190;
+    --lp-cream: 250, 236, 226;
+    --color-5: rgb(var(--lp-cream));         /* signal graph numbers */
+    --lp-pylon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='10' viewBox='0 0 56 10'%3E%3Cg fill='none' stroke='%23f29680' stroke-opacity='0.75' stroke-width='0.9'%3E%3Cpath d='M28 0V9M28 1L10 8M28 3L16 8M28 5L22 8M28 1L46 8M28 3L40 8M28 5L34 8'/%3E%3Cpath d='M0 8.5H56' stroke-width='1.1'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Bridge low in the frame, open sunset sky above the panels */
+[data-theme="theme12"] body {
+    background: url("../images/patra/patra-bridge-sunset-1920.webp") center 78% / cover fixed no-repeat rgb(20, 18, 34) !important;
+}
+
+[data-theme="theme12"] .wrapper-outer {
+    background-color: rgba(10, 10, 26, 0.28) !important;
+}
+
+[data-theme="theme12"] *[class^="panel-"]:not(.no-bg):not(.panel-full) {
+    background:
+        linear-gradient(to bottom, rgba(var(--lp-gold), 0.07), transparent 60%),
+        rgba(var(--lp-panel), 0.16);
+}
+
+[data-theme="theme12"] *[class^="panel-"]:not(.no-bg):not(.no-filter) {
+    backdrop-filter: blur(6px) saturate(1.15);
+    -webkit-backdrop-filter: blur(6px) saturate(1.15);
+}
+
+[data-theme="theme12"] *[class^="panel-"].hover-brighten:hover {
+    background:
+        linear-gradient(to bottom, rgba(var(--lp-gold), 0.14), transparent 60%),
+        rgba(var(--lp-panel-hover), 0.26) !important;
+}
+
+/* Labels in warm cream, with the pylon underneath */
+[data-theme="theme12"] *[class^="panel-"] h2:not(:has(.data-pty)):not(:has(#data-station-name)) {
+    color: rgba(var(--lp-cream), 0.92);
+    text-shadow: var(--patra-shadow);
+}
+
+[data-theme="theme12"] *[class^="panel-"] h2:not(:has(.data-pty)):not(:has(#data-station-name))::after {
+    content: "";
+    display: block;
+    width: 56px;
+    height: 10px;
+    margin: 3px auto 0;
+    background: var(--lp-pylon) no-repeat center;
+}
+
+[data-theme="theme12"] h1#tuner-name,
+[data-theme="theme12"] h1#tuner-name * {
+    color: rgb(var(--lp-cream)) !important;
+    text-shadow: var(--patra-shadow) !important;
+}
+
+[data-theme="theme12"] .dashboard-panel-plugin-list,
+[data-theme="theme12"] .dashboard-panel-plugin-list * {
+    color: rgb(var(--lp-cream)) !important;
+    text-shadow: var(--patra-shadow);
+}
+
+[data-theme="theme12"] .highest-signal-container,
+[data-theme="theme12"] .signal-units {
+    color: rgba(var(--lp-cream), 0.85) !important;
+}
+
+/* Header plugin labels use an inline "color: var(--color-main-bright) !important" */
+[data-theme="theme12"] .dashboard-panel-plugin-list button span {
+    --color-main-bright: rgb(var(--lp-cream));
+}
+
+
+/* ==========================================================
+   Patras Harbour (theme13): the marina, boats on calm water under a clear sky.
+   Sea-blue glass, light drifting across the panels like sun on water,
+   a small wave under the labels and a ripple on button presses.
+   ========================================================== */
+
+[data-theme="theme13"] {
+    --lp-gold: 104, 184, 236;                /* sea blue accent (edges, labels) */
+    --lp-amber: rgb(206, 238, 255);          /* display digits */
+    --lp-amber-glow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 10px rgba(0, 0, 0, 0.55), 0 0 4px rgba(170, 220, 255, 0.6), 0 0 16px rgba(80, 160, 230, 0.35);
+    --lp-scanlines: linear-gradient(transparent, transparent);
+    --lp-panel: 6, 22, 42;                   /* deep gulf blue */
+    --lp-panel-hover: 10, 32, 58;
+    --lp-glow: 110, 190, 245;
+    --lp-accent-text: 190, 228, 255;
+    --lp-wave: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='6' viewBox='0 0 48 6'%3E%3Cpath d='M0 3 Q 6 0 12 3 T 24 3 T 36 3 T 48 3' fill='none' stroke='%2368b8ec' stroke-opacity='0.65' stroke-width='1.2'/%3E%3C/svg%3E");
+}
+
+/* Boats along the bottom, open sky above the panels */
+[data-theme="theme13"] body {
+    background: url("../images/patra/patra-marina-1920.webp") center 85% / cover fixed no-repeat rgb(8, 24, 40) !important;
+}
+
+[data-theme="theme13"] .wrapper-outer {
+    background-color: rgba(2, 12, 24, 0.42) !important;
+}
+
+[data-theme="theme13"] *[class^="panel-"]:not(.no-bg):not(.panel-full) {
+    background:
+        linear-gradient(100deg, transparent 35%, rgba(200, 235, 255, 0.07) 50%, transparent 65%),
+        radial-gradient(ellipse at 50% 0%, rgba(var(--lp-gold), 0.08), transparent 70%),
+        rgba(var(--lp-panel), 0.14);
+    background-size: 300% 100%, auto, auto;
+    background-position: 100% 0, 0 0, 0 0;
+    animation: patra-sea-shimmer 14s ease-in-out infinite;
+}
+
+[data-theme="theme13"] *[class^="panel-"]:nth-child(2n) {
+    animation-delay: -5s;
+}
+
+[data-theme="theme13"] *[class^="panel-"]:nth-child(3n) {
+    animation-delay: -9s;
+}
+
+@keyframes patra-sea-shimmer {
+    0%   { background-position: 100% 0, 0 0, 0 0; }
+    50%  { background-position: 0% 0, 0 0, 0 0; }
+    100% { background-position: 100% 0, 0 0, 0 0; }
+}
+
+[data-theme="theme13"] *[class^="panel-"]:not(.no-bg):not(.no-filter) {
+    backdrop-filter: blur(7px) saturate(1.1);
+    -webkit-backdrop-filter: blur(7px) saturate(1.1);
+}
+
+[data-theme="theme13"] *[class^="panel-"].hover-brighten:hover {
+    background:
+        radial-gradient(ellipse at 50% 0%, rgba(var(--lp-gold), 0.14), transparent 70%),
+        rgba(var(--lp-panel-hover), 0.18) !important;
+}
+
+[data-theme="theme13"] *[class^="panel-"] h2:not(:has(.data-pty)):not(:has(#data-station-name))::after {
+    content: "";
+    display: block;
+    width: 48px;
+    height: 6px;
+    margin: 3px auto 0;
+    background: var(--lp-wave) no-repeat center;
+}
+
+/* Sun glint: a soft light sweeps across the header now and then */
+[data-theme="theme13"] .panel-100-real.m-0.flex-container:has(#tuner-name) {
+    background:
+        linear-gradient(100deg, transparent 40%, rgba(255, 244, 210, 0.10) 50%, transparent 60%),
+        rgba(var(--lp-panel), 0.14);
+    background-size: 300% 100%, auto;
+    background-position: 120% 0, 0 0;
+    animation: patra-beam 12s linear infinite;
+}
+
+@keyframes patra-beam {
+    0%, 70% { background-position: 120% 0, 0 0; }
+    100%    { background-position: -20% 0, 0 0; }
+}
+
+[data-theme="theme13"] button:not(.no-bg):not(.bg-none) {
+    background-image: radial-gradient(circle at center, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 100%);
+    background-size: 0% 0%;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: background-size 0.45s ease-out, box-shadow 0.3s ease;
+}
+
+[data-theme="theme13"] button:not(.no-bg):not(.bg-none):active {
+    background-image: radial-gradient(circle at center, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 70%);
+    background-size: 220% 220%;
+    transition: background-size 0s;
+}
+
+[data-theme="theme13"] h1#tuner-name,
+[data-theme="theme13"] h1#tuner-name * {
+    text-shadow: var(--patra-shadow) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    [data-theme="theme13"] *[class^="panel-"] {
+        animation: none !important;
+    }
+}
+
+
+/* ==========================================================
+   Castle of Patras (theme14): the castle keep under a big sky.
+   Fully transparent panels with a warm limestone border,
+   white text with a soft dark shadow so it reads over the clouds.
+   ========================================================== */
+
+[data-theme="theme14"] {
+    --lp-gold: 214, 176, 128;                /* limestone accent (edges, labels) */
+    --lp-amber: rgb(255, 248, 236);          /* display digits: warm white */
+    --lp-amber-glow: 0 0 2px rgba(0, 0, 0, 0.9), 0 1px 3px rgba(0, 0, 0, 0.95), 0 0 14px rgba(0, 0, 0, 0.6); /* dark shadow, not a glow */
+    --lp-scanlines: linear-gradient(transparent, transparent);
+    --lp-panel: 30, 24, 16;
+    --lp-panel-hover: 42, 34, 22;
+    --lp-glow: 0, 0, 0;                      /* other text gets a dark shadow too */
+    --lp-accent-text: 248, 232, 208;
+}
+
+/* Castle and trees along the bottom, clouds above the panels */
+[data-theme="theme14"] body {
+    background: url("../images/patra/patra-castle-1920.webp") center 85% / cover fixed no-repeat rgb(40, 46, 56) !important;
+}
+
+[data-theme="theme14"] .wrapper-outer {
+    background-color: rgba(16, 14, 10, 0.24) !important;
+}
+
+[data-theme="theme14"] *[class^="panel-"]:not(.no-bg):not(.panel-full) {
+    background: transparent;
+    box-shadow: inset 0 0 0 1.5px rgba(var(--lp-gold), 0.70);
+}
+
+[data-theme="theme14"] *[class^="panel-"].hover-brighten:hover {
+    background: rgba(var(--lp-panel-hover), 0.08) !important;
+    box-shadow: inset 0 0 0 2px rgba(var(--lp-gold), 0.95) !important;
+}
+
+[data-theme="theme14"] *[class^="panel-"]:not(.no-bg):not(.no-filter) {
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+[data-theme="theme14"] *[class^="panel-"] h2,
+[data-theme="theme14"] *[class^="panel-"] h3,
+[data-theme="theme14"] *[class^="panel-"] h4,
+[data-theme="theme14"] *[class^="panel-"] span,
+[data-theme="theme14"] *[class^="panel-"] li,
+[data-theme="theme14"] #tuner-name {
+    text-shadow: var(--patra-shadow);
+}
+
+[data-theme="theme14"] *[class^="panel-"] h2:not(:has(.data-pty)):not(:has(#data-station-name)) {
+    color: #fff !important;
+    background: none;
+    text-shadow: var(--patra-shadow) !important;
+    font-weight: 700;
+}
+
+/* Battlement line under the labels */
+[data-theme="theme14"] *[class^="panel-"] h2:not(:has(.data-pty)):not(:has(#data-station-name))::after {
+    content: "";
+    display: block;
+    width: 48px;
+    height: 5px;
+    margin: 4px auto 0;
+    background:
+        linear-gradient(to right, rgb(var(--lp-gold)) 50%, transparent 50%) 0 0 / 8px 2px repeat-x,
+        linear-gradient(rgb(var(--lp-gold)), rgb(var(--lp-gold))) 0 100% / 100% 2px no-repeat;
+    opacity: 0.85;
+}
+
+[data-theme="theme14"] #plugin-button-presets button {
+    background-color: transparent !important;
+    box-shadow: inset 0 0 0 1.5px rgba(var(--lp-gold), 0.70) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+[data-theme="theme14"] button,
+[data-theme="theme14"] button * {
+    text-shadow: none !important;
+}
+
+/* ---------- Header bar ---------- */
+[data-theme="theme14"] .panel-100-real.m-0.flex-container:has(#tuner-name) {
+    background: rgba(22, 18, 12, 0.16);
+    box-shadow: inset 0 0 0 1.5px rgba(var(--lp-gold), 0.70);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+[data-theme="theme14"] h1#tuner-name,
+[data-theme="theme14"] h1#tuner-name i {
+    color: #fff !important;
+    background: none !important;
+    font-weight: 600;
+    text-shadow: var(--patra-shadow) !important;
+}
+
+[data-theme="theme14"] #LIVEMAP-on-off,
+[data-theme="theme14"] #LIVEMAP-on-off *,
+[data-theme="theme14"] .users-online-container,
+[data-theme="theme14"] .users-online-container * {
+    color: rgb(255, 242, 222) !important;
+    text-shadow: var(--patra-shadow) !important;
+}
+
+[data-theme="theme14"] .users-online-container,
+[data-theme="theme14"] .chatbutton,
+[data-theme="theme14"] button.settings {
+    background: transparent !important;
+    box-shadow: inset 0 0 0 1.5px rgba(var(--lp-gold), 0.75) !important;
+    border-radius: 12px !important;
+    color: rgb(255, 242, 222) !important;
+}
+
+[data-theme="theme14"] .chatbutton i,
+[data-theme="theme14"] button.settings i {
+    color: rgb(255, 242, 222) !important;
+}
+
+[data-theme="theme14"] .users-online-container:hover,
+[data-theme="theme14"] .chatbutton:hover,
+[data-theme="theme14"] button.settings:hover {
+    background: rgba(var(--lp-gold), 0.9) !important;
+}
+
+[data-theme="theme14"] .chatbutton:hover i,
+[data-theme="theme14"] button.settings:hover i,
+[data-theme="theme14"] .users-online-container:hover * {
+    color: rgb(22, 18, 12) !important;
+    text-shadow: none !important;
+}
+
+/* "Off" controls (Auto Scan, cEQ/iMS when off, Autotune) use --color-3 with the dark
+   --color-main text (about 3:1 here); the light theme text reads better */
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .bg-color-3,
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .bg-color-3 *,
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .autotune-button:not(.active) {
+    color: var(--color-text) !important;
+}
+
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .autotune-button:hover,
+:is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .autotune-button.active {
+    color: var(--color-main) !important;
+}
