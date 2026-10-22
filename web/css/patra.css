@@ -675,3 +675,18 @@
 :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .autotune-button.active {
     color: var(--color-main) !important;
 }
+
+/* Phones: the UI Add-on Pack gear has no signal panel to sit in there, and its
+   fallback pins it 176px from the top, over the welcome text. Put it in the
+   bottom-right corner of the header box instead (20px from the top, 120px tall,
+   5% side margins), where it scrolls with the page. */
+@media only screen and (max-width: 768px) {
+    html #uiape-config-fallback-host.uiape-config-host {
+        position: static !important;
+    }
+    html #uiape-config-fallback-host > #uiape-config-gear {
+        position: absolute !important;
+        top: 106px !important;
+        right: calc(5% + 10px) !important;
+    }
+}
