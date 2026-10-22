@@ -328,7 +328,7 @@
     :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"])::after {
         position: static;
         display: block;
-        padding: 8px 0 12px;
+        padding: 8px 0 112px;   /* clear the fixed bottom bar and play button */
         text-align: center;
     }
 }
