@@ -661,7 +661,7 @@ function processString(string, errors) {
     const max_error = 10;
     errors = errors?.split(',');
 
-    // Patra themes: drop trailing RDS padding so the text is visually centred
+    // Orchomenos themes: drop trailing RDS padding so the text is visually centred
     if (['theme12', 'theme13', 'theme14'].includes(document.documentElement.getAttribute('data-theme')) && typeof string === 'string') {
         string = string.replace(/\s+$/, '');
     }

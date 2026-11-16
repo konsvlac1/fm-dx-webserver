@@ -207,7 +207,7 @@ body.modal-open {
         overflow-y: auto;
     }
 }
-/* Patra themes (Bridge / Harbour / Castle): compact, translucent settings menu */
+/* Orchomenos themes (Yliki / Parnassus / Minyas): compact, translucent settings menu */
 :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .modal-panel,
 :is([data-theme="theme12"], [data-theme="theme13"], [data-theme="theme14"]) .modal-panel-footer {
     width: 290px;

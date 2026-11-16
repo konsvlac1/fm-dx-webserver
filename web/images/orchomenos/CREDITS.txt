@@ -1,0 +1,18 @@
+Background photos of the Orchomenos themes (all from Wikimedia Commons).
+All three are released into the public domain under CC0 1.0
+(https://creativecommons.org/publicdomain/zero/1.0/): no credit is required.
+Sources are listed here only for reference.
+
+orchomenos-kopais-1920.webp (Lake Yliki, theme12):
+  "Illiki lake (part of) near Thiva Greece.jpg" by Jebulon, 2017, CC0
+  https://commons.wikimedia.org/wiki/File:Illiki_lake_(part_of)_near_Thiva_Greece.jpg
+
+orchomenos-parnassus-1920.webp (Mount Parnassus, theme13):
+  "Ο Παρνασσός όπως φαίνετε απο το Όρος Γκιώνα.jpg" (Parnassus seen from Mount Giona), 2025, CC0
+  https://commons.wikimedia.org/wiki/File:%CE%9F_%CE%A0%CE%B1%CF%81%CE%BD%CE%B1%CF%83%CF%83%CF%8C%CF%82_%CF%8C%CF%80%CF%89%CF%82_%CF%86%CE%B1%CE%AF%CE%BD%CE%B5%CF%84%CE%B5_%CE%B1%CF%80%CE%BF_%CF%84%CE%BF_%CE%8C%CF%81%CE%BF%CF%82_%CE%93%CE%BA%CE%B9%CF%8E%CE%BD%CE%B1.jpg
+
+orchomenos-minyas-1920.webp (Treasury of Minyas, theme14):
+  "Orchomenos Treasury of Minyas 1990 01.jpg" by Mark Landon, 1990, CC0
+  https://commons.wikimedia.org/wiki/File:Orchomenos_Treasury_of_Minyas_1990_01.jpg
+
+All three were scaled to 1920 px wide and saved as WebP.

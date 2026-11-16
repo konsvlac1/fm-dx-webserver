@@ -15,9 +15,9 @@ const themes = {
     theme7: [ 'rgb(13, 11, 26)', 'rgb(128, 105, 250)', 'rgb(255, 255, 255)', 'rgb(5, 4, 7)' ], // Blurple
     theme8: [ 'rgb(252, 186, 3)', 'rgb(0, 0, 0)', 'rgb(0, 0, 0)', 'rgb(252, 186, 3)' ], // Construction
     theme9: [ 'rgb(0, 0, 0)', 'rgb(204, 204, 204)', 'rgb(255, 255, 255)', 'rgb(0, 0, 0)' ], // AMOLED
-    theme12: [ 'rgb(16, 20, 38)', 'rgb(242, 150, 128)', 'rgb(250, 244, 240)', 'rgb(6, 8, 18)' ], // Rio-Antirrio Bridge
-    theme13: [ 'rgb(6, 22, 42)', 'rgb(104, 184, 236)', 'rgb(238, 247, 255)', 'rgb(0, 8, 18)' ], // Patras Harbour
-    theme14: [ 'rgb(30, 24, 16)', 'rgb(214, 176, 128)', 'rgb(255, 250, 240)', 'rgb(10, 8, 4)' ], // Castle of Patras
+    theme12: [ 'rgb(16, 22, 34)', 'rgb(170, 200, 120)', 'rgb(246, 248, 236)', 'rgb(6, 10, 16)' ], // Lake Yliki
+    theme13: [ 'rgb(34, 22, 14)', 'rgb(214, 148, 104)', 'rgb(255, 244, 232)', 'rgb(14, 8, 4)' ], // Mount Parnassus
+    theme14: [ 'rgb(30, 24, 16)', 'rgb(214, 176, 128)', 'rgb(255, 250, 240)', 'rgb(10, 8, 4)' ], // Treasury of Minyas
 };
 
 // Signal Units
