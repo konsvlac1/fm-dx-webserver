@@ -5,6 +5,7 @@ const fs = require('fs');
 const { SerialPort } = require('serialport')
 const path = require('path');
 const https = require('https');
+const crypto = require('crypto');
 
 // File Imports
 const { parseAudioDevice } = require('./stream/parser');
@@ -190,15 +191,29 @@ router.get('/api', (req, res) => {
 
 const loginAttempts = {}; // Format: { 'ip': { count: 1, lastAttempt: 1234567890 } }
 const MAX_ATTEMPTS = 25;
-const WINDOW_MS = 15 * 60 * 1000; 
+const WINDOW_MS = 15 * 60 * 1000;
+
+// Compares without leaking through timing how much of the password was right
+function samePassword(given, expected) {
+    const a = crypto.createHash('sha256').update(String(given)).digest();
+    const b = crypto.createHash('sha256').update(String(expected)).digest();
+    return crypto.timingSafeEqual(a, b);
+}
+
+// A password only matches when one is set: an empty tune or admin password is "no login", not
+// "anyone who sends an empty password"
+const passwordMatches = (given, expected) =>
+    typeof given === 'string' && given.length > 0 && typeof expected === 'string' && expected.length > 0 && samePassword(given, expected);
 
 const authenticate = (req, res, next) => {
-    const ip = req.ip || req.connection.remoteAddress;
+    // The real visitor (behind a proxy, req.ip would be the proxy, so one person could lock everyone out)
+    const ip = helpers.getClientIp(req) || req.socket.remoteAddress;
     const now = Date.now();
 
+    for (const [k, v] of Object.entries(loginAttempts)) {
+        if (now - v.lastAttempt > WINDOW_MS) delete loginAttempts[k];
+    }
     if (!loginAttempts[ip]) {
-        loginAttempts[ip] = { count: 0, lastAttempt: now };
-    } else if (now - loginAttempts[ip].lastAttempt > WINDOW_MS) {
         loginAttempts[ip] = { count: 0, lastAttempt: now };
     }
 
@@ -208,27 +223,48 @@ const authenticate = (req, res, next) => {
         });
     }
 
-    const { password } = req.body;
+    const { password } = req.body || {};
 
     loginAttempts[ip].lastAttempt = now;
 
-    if (password === serverConfig.password.adminPass) {
-        req.session.isAdminAuthenticated = true;
-        req.session.isTuneAuthenticated = true;
-        logInfo(`User from ${ip} logged in as an administrator.`);
-        loginAttempts[ip].count = 0;
-        next();
-    } else if (password === serverConfig.password.tunePass) {
-        req.session.isAdminAuthenticated = false;
-        req.session.isTuneAuthenticated = true;
-        logInfo(`User from ${ip} logged in with tune permissions.`);
-        loginAttempts[ip].count = 0;
-        next();
-    } else {
+    let role = null;
+    if (passwordMatches(password, serverConfig.password.adminPass)) role = 'admin';
+    else if (passwordMatches(password, serverConfig.password.tunePass)) role = 'tune';
+
+    if (!role) {
         loginAttempts[ip].count += 1;
-        res.status(403).json({ message: 'Login failed. Wrong password?' });
+        return res.status(403).json({ message: 'Login failed. Wrong password?' });
     }
+
+    // A new session id at login, so an id someone knew before can't be used afterwards
+    req.session.regenerate((err) => {
+        if (err) return res.status(500).json({ message: 'Login failed, please try again.' });
+        req.session.isAdminAuthenticated = role === 'admin';
+        req.session.isTuneAuthenticated = true;
+        logInfo(`User from ${ip} logged in ${role === 'admin' ? 'as an administrator' : 'with tune permissions'}.`);
+        delete loginAttempts[ip];
+        next();
+    });
 };
+
+// Admin actions must come from this server's own pages: a page on another website can't make a
+// logged-in admin's browser kick, ban, restart or change settings (cross-site request forgery).
+// The browser sends Origin with POST and Referer with same-site GET; both name the page it came from.
+function fromOwnPage(req) {
+    const from = req.headers.origin || req.headers.referer;
+    if (!from) return false;
+    let host;
+    try { host = new URL(from).host.toLowerCase(); } catch (e) { return false; }
+    const own = [req.headers['x-forwarded-host'], req.headers.host]
+        .filter(Boolean).map(h => String(h).split(',')[0].trim().toLowerCase());
+    return own.includes(host);
+}
+
+function ownPageOnly(req, res, next) {
+    if (fromOwnPage(req)) return next();
+    logWarn(`Blocked an admin request to ${req.path} that did not come from this server's pages (${helpers.getClientIp(req)}).`);
+    res.status(403).json({ success: false, message: 'This request must come from the server\'s own page.' });
+}
 
 // Route for login
 router.post('/login', authenticate, (req, res) => {
@@ -246,7 +282,7 @@ router.get('/logout', (req, res) => {
 router.get('/kick', (req, res) => {
     const ipAddress = req.query.ip; // Extract the IP address parameter from the query string
     // Terminate the WebSocket connection for the specified IP address
-    if(req.session.isAdminAuthenticated) {
+    if (req.session.isAdminAuthenticated && fromOwnPage(req)) {
         helpers.kickClient(ipAddress);
     }
     setTimeout(() => {
@@ -269,7 +305,7 @@ router.get('/connectionlog.txt', (req, res) => {
     res.attachment('connection-log.txt').type('text/plain; charset=utf-8').send(connectionLogLines().join('\n'));
 });
 
-router.post('/restart', (req, res) => {
+router.post('/restart', ownPageOnly, (req, res) => {
     if (!req.session.isAdminAuthenticated) return res.status(403).end();
 
     logInfo('Server restart requested from the admin panel.');
@@ -278,16 +314,16 @@ router.post('/restart', (req, res) => {
     setTimeout(() => process.exit(75), 500);
 });
 
-router.get('/addToBanlist', (req, res) => {
-    if (!req.session.isAdminAuthenticated) return;
+router.get('/addToBanlist', ownPageOnly, (req, res) => {
+    if (!req.session.isAdminAuthenticated) return res.status(403).json({ success: false, message: 'Admin login required.' });
 
     const ipAddress = String(req.query.ip || '').replace(/\s+/g, '');
     if (!ipAddress) return res.status(400).json({ success: false, message: 'No IP address given.' });
     const location = 'Unknown';
     const date = Date.now();
-    const reason = req.query.reason;
+    const reason = req.query.reason === undefined ? undefined : String(req.query.reason).slice(0, 500);
 
-    userBanData = [ipAddress, location, date, reason];
+    const userBanData = [ipAddress, location, date, reason];
 
     if (typeof serverConfig.webserver.banlist !== 'object') {
         serverConfig.webserver.banlist = [];
@@ -299,8 +335,8 @@ router.get('/addToBanlist', (req, res) => {
     helpers.kickClient(ipAddress);
 });
 
-router.get('/removeFromBanlist', (req, res) => {
-    if (!req.session.isAdminAuthenticated) return;
+router.get('/removeFromBanlist', ownPageOnly, (req, res) => {
+    if (!req.session.isAdminAuthenticated) return res.status(403).json({ success: false, message: 'Admin login required.' });
 
     const ipAddress = req.query.ip;
 
@@ -321,9 +357,12 @@ router.get('/removeFromBanlist', (req, res) => {
 });
 
 
-router.post('/saveData', (req, res) => {
+router.post('/saveData', ownPageOnly, (req, res) => {
     const data = req.body;
     let firstSetup;
+    if (!data || typeof data !== 'object' || Array.isArray(data)) {
+        return res.status(400).send('Invalid settings.');
+    }
     if(req.session.isAdminAuthenticated || configExists() === false) {
         configUpdate(data);
         fmdxList.update();
@@ -337,15 +376,21 @@ router.post('/saveData', (req, res) => {
         } else {
             res.status(200).send('Data saved successfully!\nSome settings may need a server restart to apply.');
         }
+    } else {
+        res.status(403).send('Admin login required.');
     }
 });
 
 router.get('/getData', (req, res) => {  
     if (configExists() === false) {
-        res.json(serverConfig);
+        return res.json(serverConfig);
     }
     
-    if(req.session.isAdminAuthenticated) {
+    if (!req.session.isAdminAuthenticated) {
+        return res.status(403).json({ error: 'Unauthorized' });
+    }
+
+    {
         // Check if the file exists
         fs.access(configPath, fs.constants.F_OK, (err) => {
             if (err) {

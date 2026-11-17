@@ -9,8 +9,13 @@ const httpServer = http.createServer(app);
 const WebSocket = require('ws');
 const wss = new WebSocket.Server({ noServer: true, perMessageDeflate: true, maxPayload: 64 * 1024 });
 const rdsWss = new WebSocket.Server({ noServer: true, maxPayload: 64 * 1024 });
-rdsWss.on('connection', (ws) => ws.on('error', (err) => logWarn('[RDS WebSocket] ' + err.message))); // unhandled 'error' crashes the process
 const pluginsWss = new WebSocket.Server({ noServer: true, perMessageDeflate: true, maxPayload: 1024 * 1024 });
+// Every connection gets an error handler before anything else runs (these listeners are registered
+// first): an unhandled 'error' (bad frame, too big) crashes the process, also on a connection that a
+// handler closes and leaves early (connection limit, bans, plugins).
+for (const [name, server] of [['Tuner', wss], ['RDS', rdsWss], ['Plugins', pluginsWss]]) {
+  server.on('connection', (ws) => ws.on('error', (err) => logWarn(`[${name} WebSocket] ` + err.message)));
+}
 const fs = require('fs');
 const path = require('path');
 const net = require('net');
@@ -102,10 +107,28 @@ let serialport;
 let timeoutAntenna;
 
 app.use(express.urlencoded({ extended: true }));
+
+// A random secret per server, made once and kept in .session-secret (it used to be the same
+// hard-coded value on every FM-DX server)
+function loadSessionSecret() {
+  const file = path.join(__dirname, '..', '.session-secret');
+  try {
+    const saved = fs.readFileSync(file, 'utf8').trim();
+    if (saved.length >= 32) return saved;
+  } catch (e) { /* not made yet */ }
+  const secret = require('crypto').randomBytes(32).toString('hex');
+  try { fs.writeFileSync(file, secret, { mode: 0o600 }); } catch (e) { logWarn('Could not save .session-secret: ' + e.message); }
+  return secret;
+}
+
 const sessionMiddleware = session({
-  secret: 'GTce3tN6U8odMwoI',
+  secret: loadSessionSecret(),
   resave: false,
   saveUninitialized: true,
+  // Logins survive restarts; visitors without a login are forgotten after a day (see session_store.js)
+  store: (() => { try { return require('./session_store')(session, path.join(__dirname, '..', 'sessions.json')); } catch (e) { return undefined; } })(),
+  // Not sent along with requests that other websites start (forged admin actions)
+  cookie: { httpOnly: true, sameSite: 'lax' },
 });
 app.use(sessionMiddleware);
 app.use(express.json());
@@ -407,8 +430,10 @@ wss.on('connection', (ws, request) => {
     ws.on('message', (message) => {
         const command = antispam(message);
 
-        if (clientIp !== '127.0.0.1') {
-            if (((command.startsWith('X') || command.startsWith('Y') || command.startsWith('C')) && !request.session.isAdminAuthenticated) || 
+        // Programs on the server itself may send any command; everyone else needs the admin login
+        // (isInternal can't be faked with an X-Forwarded-For header, see helpers.getClient)
+        if (!isInternal) {
+            if (((command.startsWith('X') || command.startsWith('Y') || command.startsWith('C')) && !request.session.isAdminAuthenticated) ||
                ((command.startsWith('F') || command.startsWith('W')) && serverConfig.bwSwitch === false)) {
                 logWarn(`User \x1b[90m${clientIp}\x1b[0m attempted to send a potentially dangerous command: ${command.slice(0, 64)}.`);
                 return;

@@ -129,9 +129,13 @@ let serverConfig = {
   antennaNoUsersDelay: false
 };
 
+// Keys that would reach Object.prototype (prototype pollution) are never copied
+const UNSAFE_KEYS = ['__proto__', 'constructor', 'prototype'];
+const safeKeys = (obj) => Object.keys(obj).filter((key) => !UNSAFE_KEYS.includes(key));
+
 // Function to add missing fields without overwriting existing values
 function addMissingFields(target, source) {
-  Object.keys(source).forEach(function(key) {
+  safeKeys(source).forEach(function(key) {
     if (typeof source[key] === 'object' && source[key] !== null && !Array.isArray(source[key])) {
       if (!target[key]) {
         target[key] = {}; // Create missing object
@@ -147,7 +151,7 @@ function addMissingFields(target, source) {
 
 // Function to merge new configuration, overwriting existing values
 function deepMerge(target, source) {
-  Object.keys(source).forEach(function(key) {
+  safeKeys(source).forEach(function(key) {
     if (typeof source[key] === 'object' && source[key] !== null && !Array.isArray(source[key])) {
       if (!target[key] || typeof target[key] !== 'object') {
         target[key] = {}; // Ensure target[key] is an object before merging
@@ -162,9 +166,11 @@ function deepMerge(target, source) {
 // Function to update the configuration at runtime
 function configUpdate(newConfig) {
   if (newConfig.webserver && (newConfig.webserver.banlist !== undefined || newConfig.plugins !== undefined)) {
-    serverConfig.webserver.banlist = newConfig.webserver.banlist;
-    serverConfig.plugins = newConfig.plugins;
+    // Both must be lists (anything else would break bans and plugin loading)
+    if (Array.isArray(newConfig.webserver.banlist)) serverConfig.webserver.banlist = newConfig.webserver.banlist;
+    if (Array.isArray(newConfig.plugins)) serverConfig.plugins = newConfig.plugins.filter((p) => typeof p === 'string');
     delete newConfig.webserver.banlist;
+    delete newConfig.plugins;
   }
   
   deepMerge(serverConfig, newConfig); // Overwrite with newConfig values
