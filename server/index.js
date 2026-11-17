@@ -7,9 +7,10 @@ const readline = require('readline');
 const app = express();
 const httpServer = http.createServer(app);
 const WebSocket = require('ws');
-const wss = new WebSocket.Server({ noServer: true, perMessageDeflate: true });
-const rdsWss = new WebSocket.Server({ noServer: true });
-const pluginsWss = new WebSocket.Server({ noServer: true, perMessageDeflate: true });
+const wss = new WebSocket.Server({ noServer: true, perMessageDeflate: true, maxPayload: 64 * 1024 });
+const rdsWss = new WebSocket.Server({ noServer: true, maxPayload: 64 * 1024 });
+rdsWss.on('connection', (ws) => ws.on('error', (err) => logWarn('[RDS WebSocket] ' + err.message))); // unhandled 'error' crashes the process
+const pluginsWss = new WebSocket.Server({ noServer: true, perMessageDeflate: true, maxPayload: 1024 * 1024 });
 const fs = require('fs');
 const path = require('path');
 const net = require('net');
@@ -393,12 +394,7 @@ wss.on('connection', (ws, request) => {
 
     if (timeoutAntenna) clearTimeout(timeoutAntenna);
 
-    helpers.handleConnect(clientIp, currentUsers, ws, (result) => {
-      if (result === "User banned") {
-          ws.close(1008, 'Banned IP');
-          return;
-      }
-
+    helpers.handleConnect(clientIp, currentUsers, ws, () => {
     dataHandler.showOnlineUsers(currentUsers);
 
     if (currentUsers === 1 && serverConfig.autoShutdown === true && serverConfig.xdrd.wirelessConnection) {
@@ -621,6 +617,18 @@ httpServer.on('upgrade', (request, socket, head) => {
     return;
   }
 
+  // Same for clients whose AS is on the banned_as list; LAN/loopback has no AS to look up
+  const client = helpers.getClient(request);
+  (client.isLocal ? Promise.resolve(false) : helpers.isBannedAS(client.ip)).then((banned) => {
+    if (banned) {
+      socket.end('HTTP/1.1 403 Forbidden\r\nConnection: close\r\n\r\n');
+      return;
+    }
+    routeUpgrade(request, socket, head);
+  });
+});
+
+function routeUpgrade(request, socket, head) {
   if (request.url === '/text') {
     sessionMiddleware(request, {}, () => {
       wss.handleUpgrade(request, socket, head, (ws) => {
@@ -657,7 +665,7 @@ httpServer.on('upgrade', (request, socket, head) => {
   } else {
     socket.destroy();
   }
-});
+}
 
 app.use(express.static(path.join(__dirname, '../web'))); // Serve the entire web folder to the user
 fmdxList.update();
