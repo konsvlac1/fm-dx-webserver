@@ -19,9 +19,14 @@ function parseMarkdown(parsed) {
   var italicRegex = /\*(.*?)\*/g;
   parsed = parsed.replace(italicRegex, '<em>$1</em>');
   
+  // Only web and e-mail links (no javascript: and the like); quotes can't break out of href
   var linkRegex = /\[([^\]]+)]\(([^)]+)\)/g;
-  parsed = parsed.replace(linkRegex, '<a href="$2" target="_blank">$1</a>');
-  
+  parsed = parsed.replace(linkRegex, (match, text, url) => {
+    url = url.trim();
+    if (!/^(https?:\/\/|mailto:)/i.test(url)) return text;
+    return `<a href="${url.replace(/"/g, '%22').replace(/</g, '%3C').replace(/>/g, '%3E')}" target="_blank" rel="noopener noreferrer">${text}</a>`;
+  });
+
   parsed = parsed.replace(/\n/g, '<br>');
   
   return parsed;
@@ -59,10 +64,29 @@ function authenticateWithXdrd(client, salt, password) {
 
 const cleanIp = (ip) => String(ip || '').replace(/\s+/g, '').replace(/^::ffff:/, '').split('%')[0];
 
-// All IPs from x-forwarded-for (or the socket), normalized
+const isLoopback = (ip) => ip === '127.0.0.1' || ip === '::1';
+
+// Loopback, LAN (10/8, 172.16/12, 192.168/16), link-local, CGNAT/Tailscale (100.64/10) and IPv6 ULA/link-local
+const isPrivateIp = (ip) => !ip || isLoopback(ip) ||
+  /^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|169\.254\.|100\.(6[4-9]|[7-9]\d|1[01]\d|12[0-7])\.|f[cd][0-9a-f]{2}:|fe80:)/i.test(ip);
+
+// Proxies whose X-Forwarded-For we believe: our own network, plus webserver.trustedProxies
+// (for a proxy or CDN outside it, e.g. ["203.0.113.10"])
+const isTrustedProxy = (ip) => isPrivateIp(ip) ||
+  (Array.isArray(serverConfig.webserver.trustedProxies) && serverConfig.webserver.trustedProxies.map(cleanIp).includes(ip));
+
+// The visitor first, then the proxies in between. X-Forwarded-For is written by whoever sends the
+// request, so it is only used when the connection comes from a trusted proxy, and it is read from
+// the right: the first address that is not one of our proxies is the visitor. Anything a visitor
+// puts in the header themselves (e.g. "127.0.0.1") stays to the left of that and is ignored.
 function getClientIps(req) {
-  const raw = req.headers['x-forwarded-for'] || req.socket?.remoteAddress || '';
-  return raw.split(',').map(cleanIp).filter(Boolean);
+  const socketIp = cleanIp(req.socket?.remoteAddress);
+  if (!isTrustedProxy(socketIp)) return socketIp ? [socketIp] : [];
+
+  const chain = [...String(req.headers['x-forwarded-for'] || '').split(',').map(cleanIp), socketIp].filter(Boolean);
+  let i = chain.length - 1;
+  while (i > 0 && isTrustedProxy(chain[i])) i--;
+  return chain.slice(i);
 }
 
 const getClientIp = (req) => getClientIps(req)[0];
@@ -73,9 +97,10 @@ function getClient(req) {
   return {
     ip,
     // LAN/loopback, exempt from the per-IP connection limit
-    isLocal: !ip || ip === '127.0.0.1' || ip === '::1' || /^(10\.|192\.168\.|172\.16\.)/.test(ip),
-    // Server-side localhost socket (no browser Origin), not counted as a user
-    isInternal: ip === '127.0.0.1' && !req.headers.origin?.trim(),
+    isLocal: isPrivateIp(ip),
+    // A program on the server itself (plugins, scripts): loopback, not forwarded by a proxy, no
+    // browser Origin. Not counted as a user, and may send admin-only tuner commands.
+    isInternal: isLoopback(ip) && !req.headers['x-forwarded-for'] && !req.headers.origin?.trim(),
   };
 }
 
@@ -343,7 +368,8 @@ function createAntispam(ws, clientIp, lengthCommands, endpointName, maxPayloadSi
     if (recentCommands.length >= 8) {
       consoleCmd.logWarn(`User \x1b[90m${clientIp}\x1b[0m is spamming with rapid commands. Connection will be terminated and user will be banned.`);
 
-      if (!serverConfig.webserver.banlist.some(banEntry => banEntry[0] === clientIp)) {
+      // Never ban the server itself (plugins and scripts on it connect from loopback)
+      if (!isLoopback(clientIp) && !serverConfig.webserver.banlist.some(banEntry => banEntry[0] === clientIp)) {
         serverConfig.webserver.banlist.push([clientIp, 'Unknown', Date.now(), '[Auto ban] Spam']);
         consoleCmd.logInfo(`User \x1b[90m${clientIp}\x1b[0m has been added to the banlist due to extreme spam.`);
         configSave();
@@ -379,5 +405,5 @@ const escapeHtml = (unsafe) => {
 
 
 module.exports = {
-  authenticateWithXdrd, parseMarkdown, handleConnect, removeMarkdown, formatUptime, resolveDataBuffer, kickClient, checkIPv6Support, checkLatency, createAntispam, getClient, getClientIp, isBanned, isBannedAS, escapeHtml
+  authenticateWithXdrd, parseMarkdown, handleConnect, removeMarkdown, formatUptime, resolveDataBuffer, kickClient, checkIPv6Support, checkLatency, createAntispam, getClient, getClientIp, isBanned, isBannedAS, escapeHtml, isPrivateIp
 }

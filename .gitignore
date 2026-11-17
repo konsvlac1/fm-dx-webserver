@@ -7,3 +7,6 @@ node_modules/
 !/plugins/example/frontend.js
 !/plugins/example.js
 /plugins_configs
+.session-secret
+sessions.json
+sessions.json.tmp
